@@ -12,6 +12,10 @@ import threading
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 
+# Always run from this file's folder, so images/ and debug.log
+# are found no matter where the script was started from
+os.chdir(BASE)
+
 JAVA_SRC = os.path.join(BASE, "java", "src")
 JAVA_OUT = os.path.join(BASE, "java", "deploy")
 PY4J_JAR = os.path.join(BASE, "lib", "py4j.jar")
@@ -199,6 +203,113 @@ def draw_board(surface):
 
 
 # =========================
+# Mouse input
+# =========================
+
+SELECTED_COLOR = (255, 200, 0)
+TARGET_COLOR = (0, 170, 80)
+
+debug_window = gateway.jvm.utils.DebugWindow
+
+selected_square = None
+target_squares = []
+
+
+def square_from_pos(pos):
+
+    col = pos[0] // 100
+    row = 7 - (pos[1] // 100)
+
+    return row * 8 + col
+
+
+def square_to_cords(square):
+
+    return ((square % 8) * 100, (7 - square // 8) * 100)
+
+
+def is_white_piece(board, square):
+
+    return (
+        board.isOccupy(square)
+        and str(board.getSquare(square).getName()).isupper()
+    )
+
+
+def select_square(square):
+
+    global selected_square
+    global target_squares
+
+    selected_square = square
+
+    if square is None:
+        target_squares = []
+
+    else:
+        target_squares = [
+            target for target in range(64)
+            if main.isMoveValid(square, target)
+        ]
+
+
+def handle_click(pos):
+
+    # Returns True if the click played a move
+
+    if main.isWin() or not main.isWhiteTurn():
+        return False
+
+    square = square_from_pos(pos)
+
+    if not 0 <= square < 64:
+        return False
+
+    # Second click: play the move
+    if selected_square is not None and main.isMoveValid(selected_square, square):
+
+        from_square = selected_square
+        select_square(None)
+
+        debug_window.addLog(
+            "Player moved: " + str(from_square) + " to " + str(square)
+        )
+
+        if main.turn(from_square, square):
+            debug_window.addLog("Player wins!")
+
+        return True
+
+    # First click: select a white piece, anything else clears the selection
+    if is_white_piece(main.getBoard(), square):
+        select_square(square)
+
+    else:
+        select_square(None)
+
+    return False
+
+
+def draw_selection(surface):
+
+    if selected_square is None:
+        return
+
+    x, y = square_to_cords(selected_square)
+
+    pygame.draw.rect(surface, SELECTED_COLOR, (x, y, 100, 100), 6)
+
+
+def draw_targets(surface):
+
+    for target in target_squares:
+
+        x, y = square_to_cords(target)
+
+        pygame.draw.circle(surface, TARGET_COLOR, (x + 50, y + 50), 15)
+
+
+# =========================
 # Terminal input
 # =========================
 
@@ -243,9 +354,15 @@ running = True
 while running:
 
     # Pygame events
+    played_by_mouse = False
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if handle_click(event.pos):
+                played_by_mouse = True
 
 
     # # Player turn
@@ -280,12 +397,21 @@ while running:
     #     else:
 
     #         main.botTurn()
-    main.update()
+
+    # After a mouse move, skip one update so the move is drawn
+    # before the bot starts thinking
+    if not played_by_mouse:
+        main.update()
 
 
 
     # Get board from Java
     board = main.getBoard()
+
+
+    # Drop the selection if the piece is gone (undo / reset / bot move)
+    if selected_square is not None and not is_white_piece(board, selected_square):
+        select_square(None)
 
 
     # -------------------------
@@ -310,6 +436,9 @@ while running:
                     y
                 )
 
+
+    draw_selection(screen)
+    draw_targets(screen)
 
     pygame.display.update()
 
