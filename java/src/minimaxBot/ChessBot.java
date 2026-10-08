@@ -18,47 +18,69 @@ public class ChessBot {
 
     public void turn() {
         Move bestMove = null;
-        bestScore = Integer.MIN_VALUE;
+        boolean isWhite = this.game.isWhiteTurn();
+        bestScore = isWhite ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+
+        int alpha = Integer.MIN_VALUE;
+        int beta = Integer.MAX_VALUE;
 
         for (Move move : this.game.getAllMoves()) {
 
             this.game.turn(move);
-            int score = miniMax(this.maxDepth - 1, Integer.MIN_VALUE, Integer.MAX_VALUE);
+            int score = miniMax(this.maxDepth - 1, alpha, beta);
             this.game.undoTurn();
 
-            if (score > bestScore) {
-                bestScore = score;
-                bestMove = move;
+            if (isWhite) {
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestMove = move;
+                }
+                alpha = Math.max(alpha, bestScore);
+            } else {
+                if (score < bestScore) {
+                    bestScore = score;
+                    bestMove = move;
+                }
+                beta = Math.min(beta, bestScore);
             }
         }
+
         DebugWindow.addLog("Best Move: " + bestMove + " Best Score: " + bestScore);
-        this.game.turn(bestMove);
+        if (bestMove != null) {
+            this.game.turn(bestMove);
+        }
     }
 
     public int miniMax(int depth, int alpha, int beta) {
-        if (this.game.isWin() != 0) {
-            return 1000000 * this.game.isWin() * (this.game.isWhiteTurn() ? 1 : -1);
+        if (this.game.isFinished()) {
+            return 1000000 * this.game.playerWon().getValue();
         } else if (depth == 0) {
             return evaluateBoard();
         }
 
-        int bestScore = Integer.MIN_VALUE;
+        boolean isWhite = this.game.isWhiteTurn();
+        int bestScore = isWhite ? Integer.MIN_VALUE : Integer.MAX_VALUE;
         Move[] moves = this.game.getAllMoves();
 
         for (Move move : moves) {
-            
             this.game.turn(move);
-            int minimaxScore = miniMax(depth - 1, -beta, -alpha);
+            int minimaxScore = miniMax(depth - 1, alpha, beta);
             this.game.undoTurn();
 
-            if (minimaxScore > bestScore) {
-                bestScore = minimaxScore;
-            }
-
-            alpha = Math.max(alpha, minimaxScore);
-
-            if (alpha >= beta) {
-                break;
+            if (isWhite) {
+                bestScore = Math.max(bestScore, minimaxScore);
+                alpha = Math.max(alpha, bestScore);
+                // Cutoff for White (Maximizer)
+                if (beta <= alpha) {
+                    break;
+                }
+            } else {
+                bestScore = Math.min(bestScore, minimaxScore);
+                beta = Math.min(beta, bestScore);
+                // Cutoff for Black (Minimizer)
+                if (beta <= alpha) {
+                    break;
+                }
             }
         }
         return bestScore;
@@ -82,7 +104,7 @@ public class ChessBot {
         if (!(this.game.getBoard().getSquare(square) instanceof chess.pieces.Piece))
             return 0;
         Piece piece = (Piece) this.game.getBoard().getSquare(square);
-        int color = game.isWhiteTurn() ? piece.getColor().getValue() : -piece.getColor().getValue();
+        int color = piece.getColor().getValue();
         if (piece instanceof chess.pieces.Pawn)
             return 100 * color;
         if (piece instanceof chess.pieces.Knight)

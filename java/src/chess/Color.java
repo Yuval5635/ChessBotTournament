@@ -2,7 +2,8 @@ package chess;
 
 public enum Color {
     WHITE(1),
-    BLACK(-1);
+    BLACK(-1),
+    NONE(0);
 
     private final int value;
 

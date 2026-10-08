@@ -9,7 +9,7 @@ public class Main {
 
     public Main() {
         this.game = new Game();
-        this.chessBot = new ChessBot(game, 5);
+        this.chessBot = new ChessBot(game, 4);
         DebugWindow.addLog("Setup complete");
     }
 
@@ -79,6 +79,6 @@ public class Main {
     }
 
     public boolean isWin() {
-        return game.isWin() != 0;
+        return game.isFinished();
     }
 }
