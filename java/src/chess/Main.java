@@ -9,7 +9,7 @@ public class Main {
 
     public Main() {
         this.game = new Game();
-        this.chessBot = new ChessBot(game, 4);
+        this.chessBot = new ChessBot(game, 5);
         DebugWindow.addLog("Setup complete");
     }
 

@@ -48,7 +48,7 @@ public class ChessBot {
         for (Move move : moves) {
             
             this.game.turn(move);
-            int minimaxScore = -miniMax(depth - 1, -beta, -alpha);
+            int minimaxScore = miniMax(depth - 1, -beta, -alpha);
             this.game.undoTurn();
 
             if (minimaxScore > bestScore) {
