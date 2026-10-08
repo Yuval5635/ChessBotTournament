@@ -4,16 +4,20 @@ import chess.Board;
 import chess.Color;
 import chess.Move;
 
+// רץ: זז באלכסון, עד שנתקעים בכלי או בקצה הלוח
 public class Bishop extends Piece {
 
     public Bishop(Color color, int square, Board board, char name) {
         super(color, square, board, name);
     }
 
+    // כל המהלכים האפשריים של הכלי. מסמנים true בכל משבצת שאפשר להגיע אליה,
+    // ובסוף הופכים את הסימונים למערך של מהלכים.
     @Override
     public Move[] getValidMoves() {
         boolean[] isMoves = new boolean[64];
 
+        // ארבעת האלכסונים. בכל אחד מתקדמים צעד צעד (k) עד שנתקעים
         for (int i = -1; i <= 1; i += 2) {
             for (int j = -1; j <= 1; j += 2) {
                 for (int k = 1; true; k++) {
@@ -29,6 +33,7 @@ public class Bishop extends Piece {
             }
         }
 
+        // סופרים כמה משבצות סומנו, ובונים מהן את מערך המהלכים
         int numOfValidMoves = 0;
         for (boolean isMove : isMoves) {
             if (isMove)
@@ -48,6 +53,7 @@ public class Bishop extends Piece {
         return validMoves;
     }
 
+    // כמו getValidMoves, אבל כולל גם משבצות שעומד בהן כלי מאותו צבע
     @Override
     public Move[] getMovesWithDeffence() {
         boolean[] isMoves = new boolean[64];
@@ -86,6 +92,7 @@ public class Bishop extends Piece {
         return moves;
     }
 
+    // עותק של הכלי על לוח אחר
     @Override
     public Piece copy(Board newBoard) {
         return new Bishop(this.color, this.square, newBoard, this.name);
