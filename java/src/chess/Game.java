@@ -33,7 +33,7 @@ public class Game {
         this.isWhiteTurn = true;
     }
 
-    public int isWin() {
+    public Color playerWon() {
         boolean whiteKingAlive = false;
         boolean blackKingAlive = false;
 
@@ -47,11 +47,15 @@ public class Game {
         }
 
         if (!whiteKingAlive)
-            return -1;
+            return Color.BLACK;
         else if (!blackKingAlive)
-            return 1;
+            return Color.WHITE;
         else
-            return 0;
+            return Color.NONE;
+    }
+
+    public boolean isFinished(){
+        return playerWon() != Color.NONE;
     }
 
     private boolean move(Move move) {
@@ -65,7 +69,7 @@ public class Game {
     public boolean turn(Move move) {
         if (isMoveValid(move)) {
             if (move(move)) {
-                return isWin() != 0;
+                return isFinished();
             }
         }
         return false;

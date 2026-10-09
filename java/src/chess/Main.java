@@ -79,6 +79,6 @@ public class Main {
     }
 
     public boolean isWin() {
-        return game.isWin() != 0;
+        return game.isFinished();
     }
 }
