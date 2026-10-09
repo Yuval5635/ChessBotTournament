@@ -62,7 +62,7 @@ public class ChessBot {
             }
         }
 
-        DebugWindow.addLog("Best Move: " + bestMove + " Best Score: " + bestScore);
+        DebugWindow.addLog("Best Move: " + bestMove + " Best Score: [" + bestScore[0] + "," + bestScore[1] + "," + bestScore[2] + "," + bestScore[3] + "," + bestScore[4] + "]");
         if (bestMove != null) {
             this.game.turn(bestMove);
         }
@@ -226,7 +226,7 @@ public class ChessBot {
         scores[0] += getAllPieceValue();
         scores[1] += getAllPSTValue(phase);
         scores[2] += getNumMovesValue() * 2;
-        scores[3] += getAllattakingPiecesWithDefendingPiecese() * 10;
+        scores[3] += getAllattakingPiecesWithDefendingPiecese() * 7;
 
         for (int i = 0; i < scores.length; i++) {
             scores[i] = (scores[i] * phase) / 24;

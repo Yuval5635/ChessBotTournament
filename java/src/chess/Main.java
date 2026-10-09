@@ -18,7 +18,11 @@ public class Main {
     }
 
     public void update() {
-        if (!isWin() && isWhiteTurn()) {
+        if(isWin()) {
+            DebugWindow.addLog("Game Over!");
+            return;
+        }
+        if (isWhiteTurn()) {
             String playerMove = DebugWindow.getInput();
             if (isMoveValid(playerMove)) {
                 String[] parts = playerMove.split(" ");
