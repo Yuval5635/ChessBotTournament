@@ -1,4 +1,8 @@
 Game started
 Setup complete
-> Player moved: 11 to 27 Best Move: From Square: 51 To Square: 35 Best Score: 100 Player moved: 12 to 20 Best Move: From Square: 50 To Square: 42 Best Score: 100 Player moved: 6 to 21 Best Move: From Square: 52 To Square: 44 Best Score: 140 Player moved: 5 to 19 Best Move: From Square: 59 To Square: 45 Best Score: 140 Player moved: 1 to 11 Best Move: From Square: 42 To Square: 34 Best Score: 160 Player moved: 4 to 6 Best Move: From Square: 34 To Square: 27 Best Score: 220 Player moved: 20 to 27 Best Move: From Square: 45 To Square: 29 Best Score: 220 Player moved: 14 to 22 Best Move: From Square: 29 To Square: 30 Best Score: 180 Player moved: 21 to 36 Best Move: From Square: 30 To Square: 27 Best Score: 160 Player moved: 5 to 4 Best Move: From Square: 61 To Square: 34 Best Score: 380 Player moved: 11 to 17 Best Move: From Square: 27 To Square: 13 Best Score: 640
-Invalid input format. Please enter two integers separated by a space.
+Player moved: 11 to 27
+Best Move: From Square: 51 To Square: 35 Best Score: 100 Depth: 5 Time: 2.245s
+Player moved: 12 to 20
+Best Move: From Square: 50 To Square: 42 Best Score: 100 Depth: 5 Time: 2.85s
+Player moved: 6 to 21
+Best Move: From Square: 52 To Square: 44 Best Score: 140 Depth: 5 Time: 3.538s

@@ -23,9 +23,9 @@ public class ChessBot {
         this.maxDepth = depth;
     }
 
-     
+     long start;
     public Move findBestMove() {
-        long start = System.currentTimeMillis();
+        start = System.currentTimeMillis();
         long limit = 17000;
         Move bestMove = null;
         // מתחילים מהמספר הכי נמוך שקיים, כדי שכל ציון אמיתי יהיה גבוה ממנו
@@ -35,7 +35,7 @@ public class ChessBot {
      for(int Depthcount = 1; Depthcount < 50; Depthcount++) {
             bestScore = Integer.MIN_VALUE;
             long depthStart = System.currentTimeMillis();
-        for (Move move : this.game.getAllMoves()) {
+         for (Move move : this.game.getAllMoves()) {
         
             // משחקים את המהלך על הלוח, שואלים כמה המצב שווה, ומבטלים.
             // התשובה חוזרת מנקודת המבט של היריב, לכן המינוס שלפני miniMax.
@@ -48,13 +48,16 @@ public class ChessBot {
             if (score > bestScore) {
                 bestScore = score;
                 bestMove = move;
-          long lastDepthTime = System.currentTimeMillis() - depthStart;
-          long used = System.currentTimeMillis() - start;
+        
+            }
+                
 
+        } 
+        long lastDepthTime = System.currentTimeMillis() - depthStart;
+        long used = System.currentTimeMillis() - start;
         if (used + lastDepthTime * 20 > limit)
             break;
-            }
-        } 
+
     }
     return bestMove;
     }
@@ -67,7 +70,7 @@ public class ChessBot {
         bestMove = findBestMove();
         
         // מדפיסים ל-Debug Console, ומשחקים את המהלך שנבחר באמת (בלי לבטל)
-        DebugWindow.addLog("Best Move: " + bestMove + " Best Score: " + bestScore);
+        DebugWindow.addLog("Best Move: " + bestMove + " Best Score: " + bestScore+" Depth: " + maxDepth+" Time: " + ((System.currentTimeMillis() -start)/1000.0 ) + "s");
         this.game.turn(bestMove);
     }
     
