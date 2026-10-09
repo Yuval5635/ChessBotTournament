@@ -23,34 +23,55 @@ public class ChessBot {
         this.maxDepth = depth;
     }
 
-    // ===== חלק 1: בחירת מהלך =====
-    // נקראת כשמגיע תור הבוט. מנסה כל מהלך אפשרי,
-    // ומשחקת את זה שקיבל את הציון הכי גבוה.
-    public void turn() {
+     
+    public Move findBestMove() {
+        long start = System.currentTimeMillis();
+        long limit = 17000;
         Move bestMove = null;
         // מתחילים מהמספר הכי נמוך שקיים, כדי שכל ציון אמיתי יהיה גבוה ממנו
-        bestScore = Integer.MIN_VALUE;
+       
 
         // עוברים על כל המהלכים החוקיים של מי שתורו (הבוט)
+     for(int Depthcount = 1; Depthcount < 50; Depthcount++) {
+            bestScore = Integer.MIN_VALUE;
+            long depthStart = System.currentTimeMillis();
         for (Move move : this.game.getAllMoves()) {
-
+        
             // משחקים את המהלך על הלוח, שואלים כמה המצב שווה, ומבטלים.
             // התשובה חוזרת מנקודת המבט של היריב, לכן המינוס שלפני miniMax.
             // שני המספרים האחרונים הם ערכי ההתחלה של alpha ו-beta (הגיזום).
             this.game.turn(move);
-            int score = -miniMax(this.maxDepth - 1, -10000000, 10000000);  
+            int score = -miniMax(Depthcount, -10000000, 10000000);  
             this.game.undoTurn();
 
             // ציון גבוה מהשיא עד עכשיו: שומרים אותו ואת המהלך. בשוויון נשאר הראשון שנמצא
             if (score > bestScore) {
                 bestScore = score;
                 bestMove = move;
+          long lastDepthTime = System.currentTimeMillis() - depthStart;
+          long used = System.currentTimeMillis() - start;
+
+        if (used + lastDepthTime * 20 > limit)
+            break;
             }
-        }
+        } 
+    }
+    return bestMove;
+    }
+    
+    // ===== חלק 1: בחירת מהלך =====
+    // נקראת כשמגיע תור הבוט. מנסה כל מהלך אפשרי,
+    // ומשחקת את זה שקיבל את הציון הכי גבוה.
+    public void turn() {
+        Move bestMove = null;
+        bestMove = findBestMove();
+        
         // מדפיסים ל-Debug Console, ומשחקים את המהלך שנבחר באמת (בלי לבטל)
         DebugWindow.addLog("Best Move: " + bestMove + " Best Score: " + bestScore);
         this.game.turn(bestMove);
     }
+    
+
 
     // ===== חלק 2: הסתכלות קדימה =====
     // מחזירה ציון למצב הנוכחי, מנקודת המבט של מי שתורו עכשיו,
@@ -160,4 +181,4 @@ public class ChessBot {
             return 20 * color;
         return 0;
     }
-}
+ }  
