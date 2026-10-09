@@ -1,6 +1,6 @@
 package chess;
 
-import minimaxBot.ChessBot;
+import minimaxBot.yuvalBot.ChessBot;
 import utils.DebugWindow;
 
 public class Main {

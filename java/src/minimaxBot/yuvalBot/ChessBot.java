@@ -1,6 +1,7 @@
-package minimaxBot;
+package minimaxBot.yuvalBot;
 
 import chess.Board;
+import chess.Color;
 import chess.Game;
 import chess.Move;
 import chess.pieces.Piece;
@@ -12,10 +13,14 @@ public class ChessBot {
     private Game game;
     private int maxDepth;
     private int[] bestScore;
+    private Move[] bestMoves;
+    private int[][] bestScores;
 
     public ChessBot(Game game, int depth) {
         this.game = game;
         this.maxDepth = depth;
+        this.bestMoves = new Move[this.maxDepth];
+        this.bestScores = new int[this.maxDepth][5];
     }
 
     public void turn() {
@@ -24,10 +29,10 @@ public class ChessBot {
 
         int alpha = Integer.MIN_VALUE;
         int beta = Integer.MAX_VALUE;
-        bestScore = new int[]{isWhite ? Integer.MIN_VALUE : Integer.MAX_VALUE};
+        bestScore = new int[] { isWhite ? Integer.MIN_VALUE : Integer.MAX_VALUE };
         int phase = 0;
 
-        // DebugWindow.addLog(this.game.getAllMoves().length + " Moves:  ");
+        // DebugWindow.addLog(this.game.getAllMoves().length + " Moves: ");
 
         for (int i = 0; i < 64; i++) {
             if (this.game.getBoard().isOccupy(i)) {
@@ -45,7 +50,7 @@ public class ChessBot {
             int score = Utils.sumArray(scores);
             int bestScoreSum = Utils.sumArray(bestScore);
 
-            // DebugWindow.addLog("Move:  " + move + "  Score:  " + score);
+            // DebugWindow.addLog("Move: " + move + " Score: " + score);
 
             if (isWhite) {
                 if (score > bestScoreSum) {
@@ -62,7 +67,9 @@ public class ChessBot {
             }
         }
 
-        DebugWindow.addLog("Best Move: " + bestMove + " Best Score: [" + bestScore[0] + "," + bestScore[1] + "," + bestScore[2] + "," + bestScore[3] + "," + bestScore[4] + "]");
+        DebugWindow.addLog("Best Move: " + bestMove + " Best Score: " + java.util.Arrays.toString(bestScore));
+        DebugWindow.addLog("Best Moves: " + java.util.Arrays.toString(bestMoves));
+        DebugWindow.addLog("Best Scores: " + java.util.Arrays.deepToString(bestScores));
         if (bestMove != null) {
             this.game.turn(bestMove);
         }
@@ -74,9 +81,9 @@ public class ChessBot {
             // DebugWindow.addLog("Game Over! Winner: " + (this.game.isWin() == 1 ? "White"
             // : "Black"));
             scores[0] = 1000000 * this.game.playerWon().getValue(); // Return a large positive or
-                                                                                     // negative score based on who wins
+                                                                    // negative score based on who wins
             return scores; // Return a large positive or
-                                                                                     // negative score based on who wins
+                           // negative score based on who wins
         } else if (depth == 0) {
             return evaluateBoard();
         }
@@ -88,20 +95,18 @@ public class ChessBot {
 
         for (Move move : moves) {
             this.game.turn(move);
-            int[] minimaxScores = miniMax(depth - 1, alpha, beta); // Recurse with reduced depth and inverted alpha-beta values
+            int[] minimaxScores = miniMax(depth - 1, alpha, beta); // Recurse with reduced depth and inverted alpha-beta
+                                                                   // values
             this.game.undoTurn();
-            
+
             int sumScores = Utils.sumArray(minimaxScores);
             int bestScoreSum = Utils.sumArray(bestScore);
-
-            if (sumScores >= 1000000 || sumScores <= -1000000) {
-                // DebugWindow.addLog("bestScore length: " + bestScore.length + " minimaxScores length: " + minimaxScores.length);
-                bestScore[4] += Math.signum(sumScores) * 50;
-            }
 
             if (isWhite) {
                 if (sumScores > bestScoreSum) {
                     bestScore = minimaxScores; // Update bestScore if the current move yields a better score
+                    bestMoves[this.maxDepth - depth] = move;
+                    bestScores[this.maxDepth - depth] = evaluateBoard();
                 }
                 alpha = Math.max(alpha, Math.max(bestScoreSum, sumScores));
                 // Cutoff for White (Maximizer)
@@ -111,6 +116,8 @@ public class ChessBot {
             } else {
                 if (sumScores < bestScoreSum) {
                     bestScore = minimaxScores; // Update bestScore if the current move yields a better score
+                    bestMoves[this.maxDepth - depth] = move;
+                    bestScores[this.maxDepth - depth] = evaluateBoard();
                 }
                 beta = Math.min(beta, Math.min(bestScoreSum, sumScores));
                 // Cutoff for Black (Minimizer)
@@ -119,13 +126,26 @@ public class ChessBot {
                 }
             }
         }
-        // if (Math.abs(bestScore) > 9000){
-        // bestScore -= bestScore * Math.signum(bestScore);
-        // }
         return bestScore;
     }
 
     private int[] evaluateBoard() {
+        int phase = getPhase();
+        if (phase == 24) {
+            return openingScore();
+        } else {
+            int[] mgScore = mgScore(phase);
+            int[] egScore = egScore(phase);
+            int[] scoreComponents = new int[5];
+            for (int i = 0; i < scoreComponents.length; i++) {
+                scoreComponents[i] = mgScore[i] + egScore[i];
+            }
+
+            return scoreComponents;
+        }
+    }
+
+    private int getPhase() {
         int phase = 0;
         Board board = this.game.getBoard();
         for (int i = 0; i < 64; i++) {
@@ -133,15 +153,7 @@ public class ChessBot {
                 phase += getPiecePhaseValue(board.getSquare(i));
             }
         }
-
-        int[] mgScore = mgScore(phase);
-        int[] egScore = egScore(phase);
-        int[] scoreComponents = new int[5];
-        for (int i = 0; i < scoreComponents.length; i++) {
-            scoreComponents[i] = mgScore[i] + egScore[i];
-        }
-
-        return scoreComponents;
+        return phase;
     }
 
     private int getAllPieceValue() {
@@ -158,14 +170,14 @@ public class ChessBot {
         int score = 0;
 
         for (int i = 0; i < 64; i++) {
-            score += PST.getPSTValue(game.getBoard().getSquare(i), phase) * (this.game.isWhiteTurn() ? -1 : 1);
+            score += PST.getPSTValue(game.getBoard().getSquare(i), phase);
         }
 
         return score;
     }
 
     private int getNumMovesValue() {
-        return this.game.getAllMoves().length * (this.game.isWhiteTurn() ? -1 : 1);
+        return this.game.getAllMoves(Color.WHITE).length - this.game.getAllMoves(Color.BLACK).length;
     }
 
     private int getPieceValue(int square) {
@@ -218,7 +230,7 @@ public class ChessBot {
             }
         }
 
-        return score * (this.game.isWhiteTurn() ? 1 : -1);
+        return score;
     }
 
     private int[] mgScore(int phase) {
@@ -245,6 +257,15 @@ public class ChessBot {
         for (int i = 0; i < scores.length; i++) {
             scores[i] = (scores[i] * (24 - phase)) / 24;
         }
+
+        return scores;
+    }
+
+    private int[] openingScore() {
+        int[] scores = new int[5];
+        scores[1] += getAllPSTValue(24);
+        scores[2] += getNumMovesValue() * 2;
+        scores[3] += getAllattakingPiecesWithDefendingPiecese() * 5;
 
         return scores;
     }

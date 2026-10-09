@@ -94,7 +94,11 @@ public class Game {
     }
 
     public Move[] getAllMoves() {
-        return this.board.getAllMoves(this.isWhiteTurn ? Color.WHITE : Color.BLACK);
+        return getAllMoves(this.isWhiteTurn ? Color.WHITE : Color.BLACK);
+    }
+
+    public Move[] getAllMoves(Color color) {
+        return this.board.getAllMoves(color);
     }
 
     public Board getBoard() {
