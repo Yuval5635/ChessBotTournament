@@ -1,15 +1,15 @@
 package chess;
 
-import minimaxBot.yuvalBot.ChessBot;
+import minimaxBot.yuvalBot.YuvalBot;
 import utils.DebugWindow;
 
 public class Main {
     private Game game;
-    ChessBot chessBot;
+    YuvalBot chessBot;
 
     public Main() {
         this.game = new Game();
-        this.chessBot = new ChessBot(game, 4);
+        this.chessBot = new YuvalBot(game, 4);
         DebugWindow.addLog("Setup complete");
     }
 

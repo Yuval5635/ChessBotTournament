@@ -8,7 +8,7 @@ import chess.pieces.Piece;
 import utils.DebugWindow;
 import utils.Utils;
 
-public class ChessBot {
+public class YuvalBot {
 
     private Game game;
     private int maxDepth;
@@ -16,7 +16,7 @@ public class ChessBot {
     private Move[] bestMoves;
     private int[][] bestScores;
 
-    public ChessBot(Game game, int depth) {
+    public YuvalBot(Game game, int depth) {
         this.game = game;
         this.maxDepth = depth;
         this.bestMoves = new Move[this.maxDepth];
