@@ -1,5 +1,6 @@
 package chess;
 
+import minimaxBot.ChessBot;
 import minimaxBot.yuvalBot.YuvalBot;
 import utils.DebugWindow;
 
@@ -7,13 +8,15 @@ import utils.DebugWindow;
 // וקורא ל-update() שוב ושוב. הקובץ רק מחבר בין השחקן, המשחק והבוט.
 public class Main {
     private Game game;
-    YuvalBot chessBot;
+    YuvalBot yuvalChessBot;
+    ChessBot chessBot;
 
     // רץ פעם אחת בהתחלה: יוצר משחק, ויוצר בוט שמקבל את אותו משחק.
     // המספר הוא העומק: כמה מהלכים קדימה הבוט מסתכל.
     public Main() {
         this.game = new Game();
-        this.chessBot = new YuvalBot(game, 5);
+        this.yuvalChessBot = new YuvalBot(game, 4);
+        this.chessBot = new ChessBot(game, 5);
         DebugWindow.addLog("Setup complete");
     }
 
