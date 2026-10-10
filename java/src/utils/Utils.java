@@ -18,4 +18,8 @@ public class Utils {
         }
         return sum;
     }
+
+    public static long now() {
+        return System.currentTimeMillis();
+    }
 }
