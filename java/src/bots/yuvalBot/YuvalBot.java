@@ -21,7 +21,7 @@ public class YuvalBot {
     }
 
     public void turn() {
-        this.startTime = System.currentTimeMillis();
+        this.startTime = Utils.now();
         Move bestMove = null;
         boolean isWhite = this.game.isWhiteTurn();
 
@@ -62,14 +62,14 @@ public class YuvalBot {
                 absBestMove = bestMove.copy();
                 DebugWindow.addLog("Depth: " + depth + " Best Move: " + absBestMove + " Score: "
                         + java.util.Arrays.toString(bestScore) + " Time: "
-                        + ((System.currentTimeMillis() - this.startTime) / 1000.0) + "s");
+                        + ((Utils.now() - this.startTime) / 1000.0) + "s");
             } catch (RuntimeException e) {
                 this.game.undoTurn();
                 break;
             }
         }
         DebugWindow.addLog("Best Move: " + absBestMove + " Score: " + java.util.Arrays.toString(bestScore) + " Depth: "
-                + depth + " Time: " + ((System.currentTimeMillis() - this.startTime) / 1000.0) + "s");
+                + (depth-1) + " Time: " + ((Utils.now() - this.startTime) / 1000.0) + "s");
         if (absBestMove != null) {
             this.game.turn(absBestMove);
         }
@@ -85,7 +85,7 @@ public class YuvalBot {
             return scores; // Return a large positive or
                            // negative score based on who wins
         } else if (depth == 0) {
-            if (System.currentTimeMillis() - this.startTime > this.maxTime) {
+            if (Utils.now() - this.startTime > this.maxTime) {
                 throw new RuntimeException("Time limit exceeded");
             }
             return evaluateBoard();
@@ -212,7 +212,7 @@ public class YuvalBot {
         return 0;
     }
 
-    private int getAllattakingPiecesWithDefendingPiecese() {
+    private int getAllattakingPiecesWithDefendingPieces() {
         int score = 0;
 
         for (int i = 0; i < 64; i++) {
@@ -233,12 +233,24 @@ public class YuvalBot {
         return score;
     }
 
+    private int getPawnsValue() {
+        int score = 0;
+        for (int col = 0; col < 8; col++) {
+            for (int row = 0; row < 8; row++) {
+                if (this.game.getBoard().isPawn(row * 8 + col)) {
+
+                }
+            }
+        }
+        return score;
+    }
+
     private int[] mgScore(int phase) {
         int[] scores = new int[5];
-        scores[0] += getAllPieceValue();
+        scores[0] += getAllPieceValue() * 10;
         scores[1] += getAllPSTValue(phase);
         scores[2] += getNumMovesValue() * 2;
-        scores[3] += getAllattakingPiecesWithDefendingPiecese() * 7;
+        scores[3] += getAllattakingPiecesWithDefendingPieces() * 7;
 
         for (int i = 0; i < scores.length; i++) {
             scores[i] = (scores[i] * phase) / 24;
@@ -249,10 +261,10 @@ public class YuvalBot {
 
     private int[] egScore(int phase) {
         int[] scores = new int[5];
-        scores[0] += getAllPieceValue();
+        scores[0] += getAllPieceValue() * 10;
         scores[1] += getAllPSTValue(phase);
         scores[2] += getNumMovesValue() * 2;
-        scores[3] += getAllattakingPiecesWithDefendingPiecese() * 10;
+        scores[3] += getAllattakingPiecesWithDefendingPieces() * 10;
 
         for (int i = 0; i < scores.length; i++) {
             scores[i] = (scores[i] * (24 - phase)) / 24;
