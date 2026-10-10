@@ -33,12 +33,12 @@ public class Main {
         if(isWin()) {
             DebugWindow.addLog("Game Over!");
             return;
-        }
+        }   chessBot.turn();
         if (isWhiteTurn()) {
-            yuvalChessBot.turn();
+            
         } else if (!isWin()) {
             // תור הבוט
-            chessBot.turn();
+            yuvalChessBot.turn();
         }
     
     }

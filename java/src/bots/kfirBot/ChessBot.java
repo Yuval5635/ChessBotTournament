@@ -23,11 +23,11 @@ public class ChessBot {
         this.game = game;
         this.maxDepth = depth;
     }
-
+    int Depthcount;
      long start;
     public Move findBestMove() {
         start = System.currentTimeMillis();
-        long limit = 3000; // 30 שניות S
+        long limit = 30000; // 30 שניות S
         Move bestMove = null;
         // מתחילים מהמספר הכי נמוך שקיים, כדי שכל ציון אמיתי יהיה גבוה ממנו
        
@@ -56,7 +56,7 @@ public class ChessBot {
         } 
         long lastDepthTime = System.currentTimeMillis() - depthStart;
         long used = System.currentTimeMillis() - start;
-        if (used + lastDepthTime * 20 > limit)
+        if (used + lastDepthTime * 12 > limit)
             break;
 
     }
@@ -71,7 +71,7 @@ public class ChessBot {
         bestMove = findBestMove();
         
         // מדפיסים ל-Debug Console, ומשחקים את המהלך שנבחר באמת (בלי לבטל)
-        DebugWindow.addLog("Kfir: Best Move: " + bestMove + " Best Score: " + bestScore+" Depth: " + maxDepth+" Time: " + ((System.currentTimeMillis() -start)/1000.0 ) + "s");
+        DebugWindow.addLog("Kfir: Best Move: " + bestMove + " Best Score: " + bestScore+" Depth: " + Depthcount+" Time: " + ((System.currentTimeMillis() -start)/1000.0 ) + "s");
         this.game.turn(bestMove);
     }
     
