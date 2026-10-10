@@ -10,14 +10,23 @@ public class Main {
     private Game game;
     YuvalBot yuvalChessBot;
     ChessBot chessBot;
+    private boolean isStart = false;
 
     // רץ פעם אחת בהתחלה: יוצר משחק, ויוצר בוט שמקבל את אותו משחק.
     // המספר הוא העומק: כמה מהלכים קדימה הבוט מסתכל.
     public Main() {
         this.game = new Game();
-        this.yuvalChessBot = new YuvalBot(game, 3);
+        this.yuvalChessBot = new YuvalBot(game, 25);
         this.chessBot = new ChessBot(game, 5);
         DebugWindow.addLog("Setup complete");
+        DebugWindow.addInputListener(input -> {
+            if (input == null)
+                return;
+            if (input.equals("start")) {
+                this.isStart = true;
+                DebugWindow.addLog("Game started");
+            }
+        });
     }
 
     // מחזירה את הלוח, כדי שפייתון יוכל לצייר אותו
@@ -30,17 +39,21 @@ public class Main {
     // אם תור השחור והמשחק לא נגמר: תור הבוט.
     // אחרי שמישהו ניצח לא קורה כלום.
     public void update() {
-        if(isWin()) {
-            DebugWindow.addLog("Game Over!");
-            return;
+        if (this.isStart) {
+            if (isWin()) {
+                DebugWindow.addLog("Game Over!");
+                return;
+            }
+            if (isWhiteTurn()) {
+                yuvalChessBot.turn();
+                DebugWindow.addLog("White Played");
+            } else if (!isWin()) {
+                // תור הבוט
+                chessBot.turn();
+                DebugWindow.addLog("Black Played");
+            }
         }
-        if (isWhiteTurn()) {
-            yuvalChessBot.turn();
-        } else if (!isWin()) {
-            // תור הבוט
-            chessBot.turn();
-        }
-    
+
     }
 
     // בודקת שהטקסט הוא שני מספרים עם רווח ביניהם, ושהמהלך חוקי
