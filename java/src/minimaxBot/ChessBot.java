@@ -1,5 +1,6 @@
 package minimaxBot;
 
+import chess.Color;
 import chess.Game;
 import chess.Move;
 import chess.pieces.Piece;
@@ -79,12 +80,12 @@ public class ChessBot {
     // ===== חלק 2: הסתכלות קדימה =====
     // מחזירה ציון למצב הנוכחי, מנקודת המבט של מי שתורו עכשיו,
     // בהנחה ששני הצדדים משחקים הכי טוב שלהם.
-    // depth = כמה מהלכים עוד נשאר לדמיין.
+    // depth = כמה מהלכים עוד נשאר לדמיין. 
     // alpha, beta = הגבולות של הגיזום.
     public int miniMax(int depth, int alpha, int beta) {
-        if (this.game.isWin() != 0) {
+        if (this.game.playerWon() != Color.NONE) {
             // מלך נאכל: ציון ענק. חיובי אם מי שתורו ניצח, שלילי אם הפסיד
-            return 1000000 * this.game.isWin() * (this.game.isWhiteTurn() ? 1 : -1);
+            return 1000000 * (this.game.playerWon() == Color.WHITE ? 1 : -1)  * (this.game.isWhiteTurn() ? 1 : -1);
         } else if (depth == 0) {
             // נגמר העומק: מפסיקים לדמיין ונותנים ציון ללוח
             return evaluateBoard();

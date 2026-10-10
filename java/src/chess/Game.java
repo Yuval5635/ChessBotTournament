@@ -41,7 +41,6 @@ public class Game {
 
     // מי ניצח: 1 = הלבן, 1- = השחור, 0 = עוד אף אחד.
     // ניצחון כאן הוא כשהמלך של הצד השני כבר לא על הלוח (נאכל). אין בדיקה של שח או מט.
-    public int isWin() {
     public Color playerWon() {
         boolean whiteKingAlive = false;
         boolean blackKingAlive = false;
