@@ -13,14 +13,10 @@ public class YuvalBot {
     private Game game;
     private int maxDepth;
     private int[] bestScore;
-    private Move[] bestMoves;
-    private int[][] bestScores;
 
     public YuvalBot(Game game, int depth) {
         this.game = game;
         this.maxDepth = depth;
-        this.bestMoves = new Move[this.maxDepth];
-        this.bestScores = new int[this.maxDepth][5];
     }
 
     public void turn() {
@@ -71,9 +67,7 @@ public class YuvalBot {
             
         }
         DebugWindow.addLog("Yuval: Best Move: " + bestMove + " Best Score: " + Utils.sumArray(bestScore)+" Time: " + ((System.currentTimeMillis() -start)/1000.0 ) + "s");
-        // DebugWindow.addLog("Best Move: " + bestMove + " Best Score: " + java.util.Arrays.toString(bestScore));
-        // DebugWindow.addLog("Best Moves: " + java.util.Arrays.toString(bestMoves));
-        // DebugWindow.addLog("Best Scores: " + java.util.Arrays.deepToString(bestScores));
+
         if (bestMove != null) {
             this.game.turn(bestMove);
         }
@@ -109,8 +103,6 @@ public class YuvalBot {
             if (isWhite) {
                 if (sumScores > bestScoreSum) {
                     bestScore = minimaxScores; // Update bestScore if the current move yields a better score
-                    bestMoves[this.maxDepth - depth] = move;
-                    bestScores[this.maxDepth - depth] = evaluateBoard();
                 }
                 alpha = Math.max(alpha, Math.max(bestScoreSum, sumScores));
                 // Cutoff for White (Maximizer)
@@ -120,8 +112,6 @@ public class YuvalBot {
             } else {
                 if (sumScores < bestScoreSum) {
                     bestScore = minimaxScores; // Update bestScore if the current move yields a better score
-                    bestMoves[this.maxDepth - depth] = move;
-                    bestScores[this.maxDepth - depth] = evaluateBoard();
                 }
                 beta = Math.min(beta, Math.min(bestScoreSum, sumScores));
                 // Cutoff for Black (Minimizer)

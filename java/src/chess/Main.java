@@ -15,7 +15,7 @@ public class Main {
     // המספר הוא העומק: כמה מהלכים קדימה הבוט מסתכל.
     public Main() {
         this.game = new Game();
-        this.yuvalChessBot = new YuvalBot(game, 2);
+        this.yuvalChessBot = new YuvalBot(game, 3);
         this.chessBot = new ChessBot(game, 5);
         DebugWindow.addLog("Setup complete");
     }
