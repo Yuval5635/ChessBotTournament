@@ -70,7 +70,7 @@ public class YuvalBot {
 
             
         }
-        DebugWindow.addLog("Best Move: " + bestMove + " Best Score: " + bestScore+" Time: " + ((System.currentTimeMillis() -start)/1000.0 ) + "s");
+        DebugWindow.addLog("Yuval: Best Move: " + bestMove + " Best Score: " + Utils.sumArray(bestScore)+" Time: " + ((System.currentTimeMillis() -start)/1000.0 ) + "s");
         // DebugWindow.addLog("Best Move: " + bestMove + " Best Score: " + java.util.Arrays.toString(bestScore));
         // DebugWindow.addLog("Best Moves: " + java.util.Arrays.toString(bestMoves));
         // DebugWindow.addLog("Best Scores: " + java.util.Arrays.deepToString(bestScores));

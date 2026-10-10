@@ -71,7 +71,7 @@ public class ChessBot {
         bestMove = findBestMove();
         
         // מדפיסים ל-Debug Console, ומשחקים את המהלך שנבחר באמת (בלי לבטל)
-        DebugWindow.addLog("Best Move: " + bestMove + " Best Score: " + bestScore+" Depth: " + maxDepth+" Time: " + ((System.currentTimeMillis() -start)/1000.0 ) + "s");
+        DebugWindow.addLog("Kfir: Best Move: " + bestMove + " Best Score: " + bestScore+" Depth: " + maxDepth+" Time: " + ((System.currentTimeMillis() -start)/1000.0 ) + "s");
         this.game.turn(bestMove);
     }
     
