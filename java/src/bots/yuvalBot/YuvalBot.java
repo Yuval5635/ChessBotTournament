@@ -41,7 +41,7 @@ public class YuvalBot {
         for (Move move : this.game.getAllMoves()) {
 
             this.game.turn(move);
-            int[] scores = miniMax(this.maxDepth + (phase > 10 ? 0 : (((40 - getNumMovesValue()) / 25) * 2)),
+            int[] scores = miniMax(this.maxDepth + (phase > 10 ? 0 : (((40 - getNumMovesValue()) / 25))),
                     alpha, beta);
             this.game.undoTurn();
 

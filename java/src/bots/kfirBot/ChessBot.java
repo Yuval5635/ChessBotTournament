@@ -27,7 +27,7 @@ public class ChessBot {
      long start;
     public Move findBestMove() {
         start = System.currentTimeMillis();
-        long limit = 3000; // 30 שניות S
+        long limit = 30000; // 30 שניות S
         Move bestMove = null;
         // מתחילים מהמספר הכי נמוך שקיים, כדי שכל ציון אמיתי יהיה גבוה ממנו
        
