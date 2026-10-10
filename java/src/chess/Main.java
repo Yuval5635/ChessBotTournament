@@ -1,7 +1,7 @@
 package chess;
 
-import minimaxBot.ChessBot;
-import minimaxBot.yuvalBot.YuvalBot;
+import bots.kfirBot.ChessBot;
+import bots.yuvalBot.YuvalBot;
 import utils.DebugWindow;
 
 // נקודת הכניסה מצד Java. החלון של פייתון (Main.py) יוצר אחד כזה
@@ -15,7 +15,7 @@ public class Main {
     // המספר הוא העומק: כמה מהלכים קדימה הבוט מסתכל.
     public Main() {
         this.game = new Game();
-        this.yuvalChessBot = new YuvalBot(game, 4);
+        this.yuvalChessBot = new YuvalBot(game, 2);
         this.chessBot = new ChessBot(game, 5);
         DebugWindow.addLog("Setup complete");
     }
@@ -35,31 +35,10 @@ public class Main {
             return;
         }
         if (isWhiteTurn()) {
-            String playerMove = DebugWindow.getInput();
-            if (isMoveValid(playerMove)) {
-                // חותכים את הטקסט לשני מספרים: מאיפה ולאן
-                String[] parts = playerMove.split(" ");
-                if (parts.length == 2) {
-                    try {
-                        int fromSquare = Integer.parseInt(parts[0]);
-                        int toSquare = Integer.parseInt(parts[1]);
-                        DebugWindow.addLog("Player moved: " + fromSquare + " to " + toSquare);
-                        // מבצעים את המהלך. turn מחזירה true אם המהלך הזה ניצח את המשחק
-                        if (turn(fromSquare, toSquare)) {
-                            DebugWindow.addLog("Player wins!");
-                        }
-                    } catch (NumberFormatException e) {
-                        DebugWindow.addLog("Invalid input format. Please enter two integers separated by a space.");
-                    }
-                } else {
-                    DebugWindow.addLog("Invalid input format. Please enter two integers separated by a space.");
-                }
-            } else if (playerMove != null && !playerMove.trim().isEmpty()) {
-                DebugWindow.addLog("Invalid input format. Please enter two integers separated by a space.");
-            }
+            yuvalChessBot.turn();
         } else if (!isWin()) {
             // תור הבוט
-            botTurn();
+            chessBot.turn();
         }
     
     }
@@ -90,11 +69,6 @@ public class Main {
     // מבצעת מהלך. מחזירה true אם המהלך ניצח את המשחק
     public boolean turn(int fromSquare, int toSquare) {
         return game.turn(new Move(fromSquare, toSquare));
-    }
-
-    // נותנת לבוט לשחק את התור שלו
-    public void botTurn() {
-        chessBot.turn();
     }
 
     // האם עכשיו תור הלבן
