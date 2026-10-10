@@ -193,6 +193,54 @@ public class Board {
         return allValidMoves;
     }
 
+    public boolean isPawn(Piece piece) {
+        return piece instanceof Pawn;
+    }
+
+    public boolean isPawn(int square) {
+        return isOccupy(square) && isPawn(getSquare(square));
+    }
+
+    public boolean isKnight(Piece piece) {
+        return piece instanceof Knight;
+    }
+
+    public boolean isKnight(int square) {
+        return isOccupy(square) && isKnight(getSquare(square));
+    }
+
+    public boolean isBishop(Piece piece) {
+        return piece instanceof Bishop;
+    }
+
+    public boolean isBishop(int square) {
+        return isOccupy(square) && isBishop(getSquare(square));
+    }
+
+    public boolean isRook(Piece piece) {
+        return piece instanceof Rook;
+    }
+
+    public boolean isRook(int square) {
+        return isOccupy(square) && isRook(getSquare(square));
+    }
+
+    public boolean isQueen(Piece piece) {
+        return piece instanceof Queen;
+    }
+
+    public boolean isQueen(int square) {
+        return isOccupy(square) && isQueen(getSquare(square));
+    }
+
+    public boolean isKing(Piece piece) {
+        return piece instanceof King;
+    }
+
+    public boolean isKing(int square) {
+        return isOccupy(square) && isKing(getSquare(square));
+    }
+
     // מדפיסה את הלוח כטקסט
     public void printBoard() {
         for (int row = 0; row < 8; row++) {
