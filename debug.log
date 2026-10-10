@@ -1,0 +1,52 @@
+Game started
+Setup complete
+Yuval: Best Move: From Square: 1 To Square: 18 Best Score: -177 Time: 0.195s
+Kfir: Best Move: From Square: 50 To Square: 42 Best Score: -20 Depth: 5 Time: 0.249s
+Yuval: Best Move: From Square: 6 To Square: 21 Best Score: -209 Time: 0.492s
+Kfir: Best Move: From Square: 53 To Square: 45 Best Score: -20 Depth: 5 Time: 0.226s
+Yuval: Best Move: From Square: 12 To Square: 28 Best Score: -171 Time: 0.527s
+Kfir: Best Move: From Square: 51 To Square: 43 Best Score: -40 Depth: 5 Time: 0.275s
+Yuval: Best Move: From Square: 5 To Square: 26 Best Score: -73 Time: 0.276s
+Kfir: Best Move: From Square: 58 To Square: 30 Best Score: -40 Depth: 5 Time: 1.151s
+Yuval: Best Move: From Square: 15 To Square: 23 Best Score: -39 Time: 0.703s
+Kfir: Best Move: From Square: 30 To Square: 21 Best Score: -120 Depth: 5 Time: 0.628s
+Yuval: Best Move: From Square: 3 To Square: 21 Best Score: -56 Time: 0.281s
+Kfir: Best Move: From Square: 43 To Square: 35 Best Score: -140 Depth: 5 Time: 1.225s
+Yuval: Best Move: From Square: 28 To Square: 35 Best Score: -69 Time: 0.515s
+Kfir: Best Move: From Square: 42 To Square: 35 Best Score: -240 Depth: 5 Time: 0.723s
+Yuval: Best Move: From Square: 26 To Square: 35 Best Score: 87 Time: 1.343s
+Kfir: Best Move: From Square: 48 To Square: 32 Best Score: -400 Depth: 5 Time: 1.845s
+Yuval: Best Move: From Square: 11 To Square: 27 Best Score: 130 Time: 2.595s
+Kfir: Best Move: From Square: 52 To Square: 44 Best Score: -380 Depth: 5 Time: 1.824s
+Yuval: Best Move: From Square: 35 To Square: 49 Best Score: 132 Time: 3.088s
+Kfir: Best Move: From Square: 56 To Square: 48 Best Score: -380 Depth: 5 Time: 3.559s
+Yuval: Best Move: From Square: 49 To Square: 42 Best Score: 105 Time: 2.799s
+Kfir: Best Move: From Square: 57 To Square: 42 Best Score: -340 Depth: 5 Time: 6.206s
+Yuval: Best Move: From Square: 21 To Square: 42 Best Score: 160 Time: 1.503s
+Kfir: Best Move: From Square: 59 To Square: 51 Best Score: -340 Depth: 5 Time: 5.059s
+Yuval: Best Move: From Square: 42 To Square: 33 Best Score: 168 Time: 4.253s
+Kfir: Best Move: From Square: 51 To Square: 33 Best Score: -200 Depth: 5 Time: 2.849s
+Yuval: Best Move: From Square: 18 To Square: 33 Best Score: 93 Time: 0.55s
+Kfir: Best Move: From Square: 48 To Square: 49 Best Score: -220 Depth: 5 Time: 0.474s
+Yuval: Best Move: From Square: 33 To Square: 18 Best Score: -97 Time: 0.952s
+Kfir: Best Move: From Square: 49 To Square: 25 Best Score: -200 Depth: 5 Time: 0.427s
+Yuval: Best Move: From Square: 4 To Square: 11 Best Score: 136 Time: 0.207s
+Kfir: Best Move: From Square: 25 To Square: 27 Best Score: -80 Depth: 5 Time: 0.268s
+Yuval: Best Move: From Square: 11 To Square: 20 Best Score: 38 Time: 0.119s
+Kfir: Best Move: From Square: 27 To Square: 26 Best Score: -80 Depth: 5 Time: 0.452s
+Yuval: Best Move: From Square: 20 To Square: 19 Best Score: 63 Time: 1.058s
+Kfir: Best Move: From Square: 26 To Square: 34 Best Score: -180 Depth: 5 Time: 0.492s
+Yuval: Best Move: From Square: 2 To Square: 20 Best Score: 109 Time: 0.329s
+Kfir: Best Move: From Square: 34 To Square: 42 Best Score: -160 Depth: 5 Time: 0.77s
+Yuval: Best Move: From Square: 18 To Square: 28 Best Score: 110 Time: 0.819s
+Kfir: Best Move: From Square: 55 To Square: 39 Best Score: -160 Depth: 5 Time: 1.074s
+Yuval: Best Move: From Square: 0 To Square: 1 Best Score: 106 Time: 1.084s
+Kfir: Best Move: From Square: 32 To Square: 24 Best Score: -160 Depth: 5 Time: 1.312s
+Yuval: Best Move: From Square: 28 To Square: 18 Best Score: 115 Time: 1.114s
+Kfir: Best Move: From Square: 24 To Square: 16 Best Score: -100 Depth: 5 Time: 0.851s
+Yuval: Best Move: From Square: 9 To Square: 16 Best Score: 104 Time: 0.492s
+Kfir: Best Move: From Square: 61 To Square: 43 Best Score: -200 Depth: 5 Time: 0.602s
+Yuval: Best Move: From Square: 18 To Square: 33 Best Score: 205 Time: 1.35s
+Kfir: Best Move: From Square: 43 To Square: 34 Best Score: -180 Depth: 5 Time: 1.717s
+Yuval: Best Move: From Square: 20 To Square: 34 Best Score: 193 Time: 0.498s
+Kfir: Best Move: From Square: 42 To Square: 34 Best Score: -280 Depth: 5 Time: 0.395s
