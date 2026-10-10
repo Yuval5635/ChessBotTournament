@@ -12,4 +12,8 @@ public record Move(int fromSquare, int toSquare) {
     public String toString() {
         return "From Square: " + this.fromSquare + " To Square: " + this.toSquare;
     }
+
+    public Move copy() {
+        return new Move(this.fromSquare, this.toSquare);
+    }
 }

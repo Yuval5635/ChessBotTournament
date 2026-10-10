@@ -82,28 +82,6 @@ public class PST {
                         -50, -30, -30, -30, -30, -30, -30, -50
         };
 
-        private static final int[] PAWN_OPENING = {
-                        0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 20, 20, 0, 0, 0,
-                        0, 0, 0, 20, 20, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0
-        };
-
-        private static final int[] QUEEN_OPENING = {
-                        20, 30, 10, 0, 0, 10, 30, 20,
-                        20, 20, 0, 0, 0, 0, 20, 20,
-                        -10, -20, -20, -20, -20, -20, -20, -10,
-                        -20, -30, -30, -40, -40, -30, -30, -20,
-                        -30, -40, -40, -50, -50, -40, -40, -30,
-                        -30, -40, -40, -50, -50, -40, -40, -30,
-                        -30, -40, -40, -50, -50, -40, -40, -30,
-                        -30, -40, -40, -50, -50, -40, -40, -30
-        };
-
         private static int flipSquare(int square) {
                 return square ^ 56;
         }
@@ -112,38 +90,29 @@ public class PST {
                 if (piece == null) {
                         return 0;
                 }
-                if (phase == 24) {
-                        if (piece instanceof chess.pieces.Pawn) {
-                                return (int) (1.5 * PAWN_OPENING[getPieceSquareRelToColor(piece)]);
-                        }
-                        if (piece instanceof chess.pieces.Queen) {
-                                return (int) (1.5 * QUEEN_OPENING[getPieceSquareRelToColor(piece)]);
-                        }
-                }
-                if (piece instanceof chess.pieces.Pawn) {
+                if (isPawn(piece)) {
                         return (int) (1.5
                                         * PAWN[getPieceSquareRelToColor(piece)]);
                 }
-                if (piece instanceof chess.pieces.Knight) {
+                if (isKnight(piece)) {
                         return (int) (1.5
                                         * KNIGHT[getPieceSquareRelToColor(piece)]);
                 }
-                if (piece instanceof chess.pieces.Bishop) {
+                if (isBishop(piece)) {
                         return (int) (1.5
                                         * BISHOP[getPieceSquareRelToColor(piece)]);
                 }
-                if (piece instanceof chess.pieces.Rook) {
+                if (isRook(piece)) {
                         return (int) (1.5
                                         * ROOK[getPieceSquareRelToColor(piece)]);
                 }
-                if (piece instanceof chess.pieces.Queen) {
+                if (isQueen(piece)) {
                         return (int) (1.5
                                         * QUEEN[getPieceSquareRelToColor(piece)]);
                 }
-                if (piece instanceof chess.pieces.King) {
-                        return phase > 12 ? (int) (1.5
-                                        * KING_MG[getPieceSquareRelToColor(piece)])
-                                        : (int) (1.5 * KING_EG[getPieceSquareRelToColor(piece)]);
+                if (isKing(piece)) {
+                        return (int) (phase > 12 ? (1.5 * KING_MG[getPieceSquareRelToColor(piece)])
+                                        : (1.5 * KING_EG[getPieceSquareRelToColor(piece)]));
                 }
                 return 0;
         }
@@ -157,5 +126,29 @@ public class PST {
                         square = flipSquare(square);
                 }
                 return square;
+        }
+
+        private static boolean isPawn(Piece piece) {
+                return piece instanceof chess.pieces.Pawn;
+        }
+
+        private static boolean isKnight(Piece piece) {
+                return piece instanceof chess.pieces.Knight;
+        }
+
+        private static boolean isBishop(Piece piece) {
+                return piece instanceof chess.pieces.Bishop;
+        }
+
+        private static boolean isRook(Piece piece) {
+                return piece instanceof chess.pieces.Rook;
+        }
+
+        private static boolean isQueen(Piece piece) {
+                return piece instanceof chess.pieces.Queen;
+        }
+
+        private static boolean isKing(Piece piece) {
+                return piece instanceof chess.pieces.King;
         }
 }

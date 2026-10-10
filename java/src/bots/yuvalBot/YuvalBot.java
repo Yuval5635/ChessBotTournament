@@ -11,65 +11,67 @@ import utils.Utils;
 public class YuvalBot {
 
     private Game game;
-    private int maxDepth;
     private int[] bestScore;
+    private long startTime;
+    private long maxTime;
 
-    public YuvalBot(Game game, int depth) {
+    public YuvalBot(Game game, long maxTime) {
         this.game = game;
-        this.maxDepth = depth;
+        this.maxTime = maxTime * 1000;
     }
 
     public void turn() {
+        this.startTime = System.currentTimeMillis();
         Move bestMove = null;
         boolean isWhite = this.game.isWhiteTurn();
 
         int alpha = Integer.MIN_VALUE;
         int beta = Integer.MAX_VALUE;
         bestScore = new int[] { isWhite ? Integer.MIN_VALUE : Integer.MAX_VALUE };
-        int phase = 0;
 
-        Long start = System.currentTimeMillis();
+        int depth = 0;
+        Move absBestMove = null;
+        while (true) {
+            depth++;
+            try {
+                for (Move move : this.game.getAllMoves()) {
 
-        // DebugWindow.addLog(this.game.getAllMoves().length + " Moves: ");
+                    this.game.turn(move);
+                    int[] scores = miniMax(depth, alpha, beta);
+                    this.game.undoTurn();
 
-        for (int i = 0; i < 64; i++) {
-            if (this.game.getBoard().isOccupy(i)) {
-                phase += getPiecePhaseValue(this.game.getBoard().getSquare(i));
+                    int score = Utils.sumArray(scores);
+                    int bestScoreSum = Utils.sumArray(bestScore);
+
+                    // DebugWindow.addLog("Move: " + move + " Score: " + score);
+
+                    if (isWhite) {
+                        if (score > bestScoreSum) {
+                            bestScore = scores;
+                            bestMove = move;
+                        }
+                        alpha = Math.max(alpha, bestScoreSum);
+                    } else {
+                        if (score < bestScoreSum) {
+                            bestScore = scores;
+                            bestMove = move;
+                        }
+                    }
+                }
+                absBestMove = null;
+                absBestMove = bestMove.copy();
+                DebugWindow.addLog("Depth: " + depth + " Best Move: " + absBestMove + " Score: "
+                        + java.util.Arrays.toString(bestScore) + " Time: "
+                        + ((System.currentTimeMillis() - this.startTime) / 1000.0) + "s");
+            } catch (RuntimeException e) {
+                this.game.undoTurn();
+                break;
             }
         }
-
-        for (Move move : this.game.getAllMoves()) {
-
-            this.game.turn(move);
-            int[] scores = miniMax(this.maxDepth + (phase > 10 ? 0 : (((40 - getNumMovesValue()) / 25))),
-                    alpha, beta);
-            this.game.undoTurn();
-
-            int score = Utils.sumArray(scores);
-            int bestScoreSum = Utils.sumArray(bestScore);
-
-            // DebugWindow.addLog("Move: " + move + " Score: " + score);
-
-            if (isWhite) {
-                if (score > bestScoreSum) {
-                    bestScore = scores;
-                    bestMove = move;
-                }
-                alpha = Math.max(alpha, bestScoreSum);
-            } else {
-                if (score < bestScoreSum) {
-                    bestScore = scores;
-                    bestMove = move;
-                }
-                beta = Math.min(beta, bestScoreSum);
-            }
-
-            
-        }
-        DebugWindow.addLog("Yuval: Best Move: " + bestMove + " Best Score: " + Utils.sumArray(bestScore)+" Time: " + ((System.currentTimeMillis() -start)/1000.0 ) + "s");
-
-        if (bestMove != null) {
-            this.game.turn(bestMove);
+        DebugWindow.addLog("Best Move: " + absBestMove + " Score: " + java.util.Arrays.toString(bestScore) + " Depth: "
+                + depth + " Time: " + ((System.currentTimeMillis() - this.startTime) / 1000.0) + "s");
+        if (absBestMove != null) {
+            this.game.turn(absBestMove);
         }
     }
 
@@ -83,6 +85,9 @@ public class YuvalBot {
             return scores; // Return a large positive or
                            // negative score based on who wins
         } else if (depth == 0) {
+            if (System.currentTimeMillis() - this.startTime > this.maxTime) {
+                throw new RuntimeException("Time limit exceeded");
+            }
             return evaluateBoard();
         }
 
@@ -90,11 +95,16 @@ public class YuvalBot {
         int[] bestScore = new int[5];
         bestScore[0] = isWhite ? Integer.MIN_VALUE : Integer.MAX_VALUE;
         Move[] moves = this.game.getAllMoves();
-
         for (Move move : moves) {
             this.game.turn(move);
-            int[] minimaxScores = miniMax(depth - 1, alpha, beta); // Recurse with reduced depth and inverted alpha-beta
-                                                                   // values
+            int[] minimaxScores;
+            try {
+                minimaxScores = miniMax(depth - 1, alpha, beta); // Recurse with reduced depth and inverted
+                                                                 // alpha-beta values
+            } catch (RuntimeException e) {
+                this.game.undoTurn();
+                throw e;
+            }
             this.game.undoTurn();
 
             int sumScores = Utils.sumArray(minimaxScores);
@@ -125,18 +135,14 @@ public class YuvalBot {
 
     private int[] evaluateBoard() {
         int phase = getPhase();
-        if (phase == 24) {
-            return openingScore();
-        } else {
-            int[] mgScore = mgScore(phase);
-            int[] egScore = egScore(phase);
-            int[] scoreComponents = new int[5];
-            for (int i = 0; i < scoreComponents.length; i++) {
-                scoreComponents[i] = mgScore[i] + egScore[i];
-            }
-
-            return scoreComponents;
+        int[] mgScore = mgScore(phase);
+        int[] egScore = egScore(phase);
+        int[] scoreComponents = new int[5];
+        for (int i = 0; i < scoreComponents.length; i++) {
+            scoreComponents[i] = mgScore[i] + egScore[i];
         }
+
+        return scoreComponents;
     }
 
     private int getPhase() {
@@ -251,15 +257,6 @@ public class YuvalBot {
         for (int i = 0; i < scores.length; i++) {
             scores[i] = (scores[i] * (24 - phase)) / 24;
         }
-
-        return scores;
-    }
-
-    private int[] openingScore() {
-        int[] scores = new int[5];
-        scores[1] += getAllPSTValue(24);
-        scores[2] += getNumMovesValue() * 2;
-        scores[3] += getAllattakingPiecesWithDefendingPiecese() * 5;
 
         return scores;
     }
