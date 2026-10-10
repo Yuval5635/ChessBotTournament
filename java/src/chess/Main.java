@@ -98,6 +98,6 @@ public class Main {
 
     // האם מישהו כבר ניצח
     public boolean isWin() {
-        return game.isWin() != 0;
+        return game.isFinished();
     }
 }

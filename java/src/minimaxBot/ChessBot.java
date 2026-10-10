@@ -100,7 +100,7 @@ public class ChessBot {
             // המינוס שלפני miniMax הופך את התשובה שלו לנקודת המבט שלי.
             // depth - 1 כי נשאר מהלך אחד פחות לדמיין.
             this.game.turn(move);
-            int minimaxScore = -miniMax(depth - 1, -beta, -alpha);
+            int minimaxScore = miniMax(depth - 1, alpha, beta);
             this.game.undoTurn();
 
             // שומרים את הציון הכי גבוה מבין המהלכים

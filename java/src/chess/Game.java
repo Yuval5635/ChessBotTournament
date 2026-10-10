@@ -42,6 +42,7 @@ public class Game {
     // מי ניצח: 1 = הלבן, 1- = השחור, 0 = עוד אף אחד.
     // ניצחון כאן הוא כשהמלך של הצד השני כבר לא על הלוח (נאכל). אין בדיקה של שח או מט.
     public int isWin() {
+    public Color playerWon() {
         boolean whiteKingAlive = false;
         boolean blackKingAlive = false;
 
@@ -56,11 +57,15 @@ public class Game {
         }
 
         if (!whiteKingAlive)
-            return -1;
+            return Color.BLACK;
         else if (!blackKingAlive)
-            return 1;
+            return Color.WHITE;
         else
-            return 0;
+            return Color.NONE;
+    }
+
+    public boolean isFinished(){
+        return playerWon() != Color.NONE;
     }
 
     // מזיזה כלי על הלוח, ואם זה הצליח מעבירה את התור לצד השני
@@ -77,7 +82,7 @@ public class Game {
     public boolean turn(Move move) {
         if (isMoveValid(move)) {
             if (move(move)) {
-                return isWin() != 0;
+                return isFinished();
             }
         }
         return false;
