@@ -7,12 +7,11 @@ import chess.Move;
 // צריח: זז ישר, בשורה או בעמודה, עד שנתקעים בכלי או בקצה הלוח
 public class Rook extends Piece {
 
-    // האם הצריח כבר זז במשחק (חשוב להצרחה)
-    boolean isMoved;
-
     public Rook(Color color, int square, Board board, char name) {
         super(color, square, board, name);
-        this.isMoved = false;
+    }
+    public Rook(Color color, int square, Board board, char name, boolean hasMoved) {
+        super(color, square, board, name, hasMoved);
     }
 
     // כל המהלכים האפשריים של הכלי. מסמנים true בכל משבצת שאפשר להגיע אליה,
@@ -25,8 +24,8 @@ public class Rook extends Piece {
         for (int i = -1; i < 2; i += 2) {
             for (int j = i; true; j += i) {
                 if (isValidMove(j, 0)) {
-                    isMoves[this.square + (j * 8)] = true;
-                    if (this.board.isOccupy(j * 8 + this.square)) {
+                    isMoves[getSquare() + (j * 8)] = true;
+                    if (getBoard().isOccupy(j * 8 + getSquare())) {
                         break;
                     }
                 } else {
@@ -35,8 +34,8 @@ public class Rook extends Piece {
             }
             for (int j = i; true; j += i) {
                 if (isValidMove(0, j)) {
-                    isMoves[this.square + j] = true;
-                    if (this.board.isOccupy(j + this.square)) {
+                    isMoves[getSquare() + j] = true;
+                    if (getBoard().isOccupy(j + getSquare())) {
                         break;
                     }
                 } else {
@@ -57,7 +56,7 @@ public class Rook extends Piece {
         int indexer = 0;
         for (int i = 0; i < 64; i++) {
             if (isMoves[i]) {
-                validMoves[indexer] = new Move(this.square, i);
+                validMoves[indexer] = new Move(getSquare(), i);
                 indexer++;
             }
         }
@@ -73,8 +72,8 @@ public class Rook extends Piece {
         for (int i = -1; i < 2; i += 2) {
             for (int j = i; true; j += i) {
                 if (isValidSquare(j, 0)) {
-                    isMoves[this.square + (j * 8)] = true;
-                    if (this.board.isOccupy(j * 8 + this.square)) {
+                    isMoves[getSquare() + (j * 8)] = true;
+                    if (getBoard().isOccupy(j * 8 + getSquare())) {
                         break;
                     }
                 } else {
@@ -83,8 +82,8 @@ public class Rook extends Piece {
             }
             for (int j = i; true; j += i) {
                 if (isValidSquare(0, j)) {
-                    isMoves[this.square + j] = true;
-                    if (this.board.isOccupy(j + this.square)) {
+                    isMoves[getSquare() + j] = true;
+                    if (getBoard().isOccupy(j + getSquare())) {
                         break;
                     }
                 } else {
@@ -104,7 +103,7 @@ public class Rook extends Piece {
         int indexer = 0;
         for (int i = 0; i < 64; i++) {
             if (isMoves[i]) {
-                moves[indexer] = new Move(this.square, i);
+                moves[indexer] = new Move(getSquare(), i);
                 indexer++;
             }
         }
@@ -112,20 +111,9 @@ public class Rook extends Piece {
         return moves;
     }
 
-    public boolean isMoved() {
-        return isMoved;
-    }
-
-    // כשהצריח זז, זוכרים שהוא כבר זז
-    @Override
-    public void moveTo(int square) {
-        super.moveTo(square);
-        this.isMoved = true;
-    }
-
     // עותק של הכלי על לוח אחר
     @Override
     public Piece copy(Board newBoard) {
-        return new Rook(this.color, this.square, newBoard, this.name);
+        return new Rook(getColor(), getSquare(), newBoard, getName(), hasMoved());
     }
 }

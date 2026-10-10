@@ -8,16 +8,24 @@ import chess.Move;
 public abstract class Piece {
 
     // הצבע, המשבצת שבה הכלי עומד, הלוח שהוא נמצא עליו, והאות שלו (אות גדולה = לבן, קטנה = שחור)
-    protected Color color;
-    protected int square;
-    protected Board board;
-    protected char name;
+    private Color color;
+    private int square;
+    private Board board;
+    private char name;
+    private boolean hasMoved = false;
 
     protected Piece(Color color, int square, Board board, char name) {
         this.color = color;
         this.square = square;
         this.board = board;
         this.name = name;
+    }
+    protected Piece(Color color, int square, Board board, char name, boolean hasMoved) {
+        this.color = color;
+        this.square = square;
+        this.board = board;
+        this.name = name;
+        this.hasMoved = hasMoved;
     }
 
     public int getSquare() {
@@ -32,9 +40,14 @@ public abstract class Piece {
         return this.name;
     }
 
+    public Board getBoard() {
+        return this.board;
+    }
+
     // מעדכנת את המשבצת שהכלי זוכר שהוא עומד בה
     public void moveTo(int square) {
         this.square = square;
+        this.hasMoved = true;
     }
 
     // האם המספר הוא משבצת שקיימת על הלוח
@@ -55,6 +68,10 @@ public abstract class Piece {
         int col = (this.square % 8) + colOffset;
         return isValidSquare(rowOffset, colOffset)
                 && ((!this.board.isOccupy(row * 8 + col)) || this.board.getColor(row * 8 + col) != this.color);
+    }
+
+    public boolean hasMoved() {
+        return this.hasMoved;
     }
 
     // כל המהלכים שהכלי יכול לעשות עכשיו. כל סוג כלי כותב את זה בעצמו

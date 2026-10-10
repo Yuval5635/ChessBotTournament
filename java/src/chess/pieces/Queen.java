@@ -11,6 +11,10 @@ public class Queen extends Piece {
         super(color, square, board, name);
     }
 
+    public Queen(Color color, int square, Board board, char name, boolean hasMoved) {
+        super(color, square, board, name, hasMoved);
+    }
+
     // כל המהלכים האפשריים של הכלי. מסמנים true בכל משבצת שאפשר להגיע אליה,
     // ובסוף הופכים את הסימונים למערך של מהלכים.
     @Override
@@ -22,8 +26,8 @@ public class Queen extends Piece {
             for (int j = -1; j <= 1; j += 2) {
                 for (int k = 1; true; k++) {
                     if (isValidMove(i * k, j * k)) {
-                        isMoves[this.square + ((i * 8) + j) * k] = true;
-                        if (this.board.isOccupy(this.square + ((i * 8) + j) * k)) {
+                        isMoves[getSquare() + ((i * 8) + j) * k] = true;
+                        if (getBoard().isOccupy(getSquare() + ((i * 8) + j) * k)) {
                             break;
                         }
                     } else {
@@ -37,8 +41,8 @@ public class Queen extends Piece {
         for (int i = -1; i < 2; i += 2) {
             for (int j = i; true; j += i) {
                 if (isValidMove(j, 0)) {
-                    isMoves[this.square + (j * 8)] = true;
-                    if (this.board.isOccupy(j * 8 + this.square)) {
+                    isMoves[getSquare() + (j * 8)] = true;
+                    if (getBoard().isOccupy(j * 8 + getSquare())) {
                         break;
                     }
                 } else {
@@ -47,8 +51,8 @@ public class Queen extends Piece {
             }
             for (int j = i; true; j += i) {
                 if (isValidMove(0, j)) {
-                    isMoves[this.square + j] = true;
-                    if (this.board.isOccupy(j + this.square)) {
+                    isMoves[getSquare() + j] = true;
+                    if (getBoard().isOccupy(j + getSquare())) {
                         break;
                     }
                 } else {
@@ -69,7 +73,7 @@ public class Queen extends Piece {
         int indexer = 0;
         for (int i = 0; i < 64; i++) {
             if (isMoves[i]) {
-                validMoves[indexer] = new Move(this.square, i);
+                validMoves[indexer] = new Move(getSquare(), i);
                 indexer++;
             }
         }
@@ -86,8 +90,8 @@ public class Queen extends Piece {
             for (int j = -1; j <= 1; j += 2) {
                 for (int k = 1; true; k++) {
                     if (isValidSquare(i * k, j * k)) {
-                        isMoves[this.square + ((i * 8) + j) * k] = true;
-                        if (this.board.isOccupy(this.square + ((i * 8) + j) * k)) {
+                        isMoves[getSquare() + ((i * 8) + j) * k] = true;
+                        if (getBoard().isOccupy(getSquare() + ((i * 8) + j) * k)) {
                             break;
                         }
                     } else {
@@ -100,8 +104,8 @@ public class Queen extends Piece {
         for (int i = -1; i < 2; i += 2) {
             for (int j = i; true; j += i) {
                 if (isValidSquare(j, 0)) {
-                    isMoves[this.square + (j * 8)] = true;
-                    if (this.board.isOccupy(j * 8 + this.square)) {
+                    isMoves[getSquare() + (j * 8)] = true;
+                    if (getBoard().isOccupy(j * 8 + getSquare())) {
                         break;
                     }
                 } else {
@@ -110,8 +114,8 @@ public class Queen extends Piece {
             }
             for (int j = i; true; j += i) {
                 if (isValidSquare(0, j)) {
-                    isMoves[this.square + j] = true;
-                    if (this.board.isOccupy(j + this.square)) {
+                    isMoves[getSquare() + j] = true;
+                    if (getBoard().isOccupy(j + getSquare())) {
                         break;
                     }
                 } else {
@@ -131,7 +135,7 @@ public class Queen extends Piece {
         int indexer = 0;
         for (int i = 0; i < 64; i++) {
             if (isMoves[i]) {
-                moves[indexer] = new Move(this.square, i);
+                moves[indexer] = new Move(getSquare(), i);
                 indexer++;
             }
         }
@@ -142,6 +146,6 @@ public class Queen extends Piece {
     // עותק של הכלי על לוח אחר
     @Override
     public Piece copy(Board newBoard) {
-        return new Queen(this.color, this.square, newBoard, this.name);
+        return new Queen(getColor(), getSquare(), newBoard, getName(), hasMoved());
     }
 }

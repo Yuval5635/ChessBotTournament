@@ -10,6 +10,9 @@ public class Bishop extends Piece {
     public Bishop(Color color, int square, Board board, char name) {
         super(color, square, board, name);
     }
+    public Bishop(Color color, int square, Board board, char name, boolean hasMoved) {
+        super(color, square, board, name, hasMoved);
+    }
 
     // כל המהלכים האפשריים של הכלי. מסמנים true בכל משבצת שאפשר להגיע אליה,
     // ובסוף הופכים את הסימונים למערך של מהלכים.
@@ -22,8 +25,8 @@ public class Bishop extends Piece {
             for (int j = -1; j <= 1; j += 2) {
                 for (int k = 1; true; k++) {
                     if (isValidMove(i * k, j * k)) {
-                        isMoves[this.square + ((i * 8) + j) * k] = true;
-                        if (this.board.isOccupy(this.square + ((i * 8) + j) * k)) {
+                        isMoves[getSquare() + ((i * 8) + j) * k] = true;
+                        if (getBoard().isOccupy(getSquare() + ((i * 8) + j) * k)) {
                             break;
                         }
                     } else {
@@ -45,7 +48,7 @@ public class Bishop extends Piece {
         int indexer = 0;
         for (int i = 0; i < 64; i++) {
             if (isMoves[i]) {
-                validMoves[indexer] = new Move(this.square, i);
+                validMoves[indexer] = new Move(getSquare(), i);
                 indexer++;
             }
         }
@@ -62,8 +65,8 @@ public class Bishop extends Piece {
             for (int j = -1; j <= 1; j += 2) {
                 for (int k = 1; true; k++) {
                     if (isValidSquare(i * k, j * k)) {
-                        isMoves[this.square + ((i * 8) + j) * k] = true;
-                        if (this.board.isOccupy(this.square + ((i * 8) + j) * k)) {
+                        isMoves[getSquare() + ((i * 8) + j) * k] = true;
+                        if (getBoard().isOccupy(getSquare() + ((i * 8) + j) * k)) {
                             break;
                         }
                     } else {
@@ -84,7 +87,7 @@ public class Bishop extends Piece {
         int indexer = 0;
         for (int i = 0; i < 64; i++) {
             if (isMoves[i]) {
-                moves[indexer] = new Move(this.square, i);
+                moves[indexer] = new Move(getSquare(), i);
                 indexer++;
             }
         }
@@ -95,6 +98,6 @@ public class Bishop extends Piece {
     // עותק של הכלי על לוח אחר
     @Override
     public Piece copy(Board newBoard) {
-        return new Bishop(this.color, this.square, newBoard, this.name);
+        return new Bishop(getColor(), getSquare(), newBoard, getName(), hasMoved());
     }
 }

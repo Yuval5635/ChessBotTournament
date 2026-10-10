@@ -7,12 +7,12 @@ import chess.Move;
 // מלך: צעד אחד לכל כיוון, ובנוסף הצרחה
 public class King extends Piece {
 
-    // האם המלך כבר זז במשחק (חשוב להצרחה)
-    boolean isMoved;
-
     public King(Color color, int square, Board board, char name) {
         super(color, square, board, name);
-        this.isMoved = false;
+    }
+
+    public King(Color color, int square, Board board, char name, boolean hasMoved) {
+        super(color, square, board, name, hasMoved);
     }
 
     // כל המהלכים האפשריים של הכלי. מסמנים true בכל משבצת שאפשר להגיע אליה,
@@ -25,7 +25,7 @@ public class King extends Piece {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if (isValidMove(i, j)) {
-                    isMoves[this.square + (i * 8) + j] = true;
+                    isMoves[getSquare() + (i * 8) + j] = true;
                 }
             }
         }
@@ -56,7 +56,7 @@ public class King extends Piece {
         int indexer = 0;
         for (int i = 0; i < 64; i++) {
             if (isMoves[i]) {
-                validMoves[indexer] = new Move(this.square, i);
+                validMoves[indexer] = new Move(getSquare(), i);
                 indexer++;
             }
         }
@@ -72,7 +72,7 @@ public class King extends Piece {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if (isValidSquare(i, j)) {
-                    isMoves[this.square + (i * 8) + j] = true;
+                    isMoves[getSquare() + (i * 8) + j] = true;
                 }
             }
         }
@@ -101,7 +101,7 @@ public class King extends Piece {
         int indexer = 0;
         for (int i = 0; i < 64; i++) {
             if (isMoves[i]) {
-                moves[indexer] = new Move(this.square, i);
+                moves[indexer] = new Move(getSquare(), i);
                 indexer++;
             }
         }
@@ -112,19 +112,19 @@ public class King extends Piece {
     // בודקת אם מותר להצריח למשבצת toSquare: המלך והצריח עוד לא זזו, והמשבצות שביניהם ריקות.
     // כל מלך מצריח רק בשורה שלו: הלבן למשבצות 2 ו-6, השחור ל-58 ו-62.
     public boolean canCastle(int toSquare) {
-        if (this.isMoved)
+        if (hasMoved())
             return false;
         // המשבצת הראשונה בשורת הבית של המלך: 0 ללבן, 56 לשחור
-        int row = this.color == Color.WHITE ? 0 : 56;
+        int row = getColor() == Color.WHITE ? 0 : 56;
         if (toSquare == row + 2) {
-            if (this.board.getSquare(row) instanceof Rook && !((Rook) this.board.getSquare(row)).isMoved()) {
-                if (!this.board.isOccupy(row + 1) && !this.board.isOccupy(row + 2) && !this.board.isOccupy(row + 3)) {
+            if (getBoard().getSquare(row) instanceof Rook && !((Rook) getBoard().getSquare(row)).hasMoved()) {
+                if (!getBoard().isOccupy(row + 1) && !getBoard().isOccupy(row + 2) && !getBoard().isOccupy(row + 3)) {
                     return true;
                 }
             }
         } else if (toSquare == row + 6) {
-            if (this.board.getSquare(row + 7) instanceof Rook && !((Rook) this.board.getSquare(row + 7)).isMoved()) {
-                if (!this.board.isOccupy(row + 5) && !this.board.isOccupy(row + 6)) {
+            if (getBoard().getSquare(row + 7) instanceof Rook && !((Rook) getBoard().getSquare(row + 7)).hasMoved()) {
+                if (!getBoard().isOccupy(row + 5) && !getBoard().isOccupy(row + 6)) {
                     return true;
                 }
             }
@@ -136,27 +136,26 @@ public class King extends Piece {
     @Override
     public void moveTo(int square) {
         if (canCastle(square)) {
-            if (this.color == Color.WHITE) {
+            if (getColor() == Color.WHITE) {
                 if (square == 2) {
-                    this.board.movePiece(new Move(0, 3));
+                    getBoard().movePiece(new Move(0, 3));
                 } else if (square == 6) {
-                    this.board.movePiece(new Move(7, 5));
+                    getBoard().movePiece(new Move(7, 5));
                 }
             } else {
                 if (square == 58) {
-                    this.board.movePiece(new Move(56, 59));
+                    getBoard().movePiece(new Move(56, 59));
                 } else if (square == 62) {
-                    this.board.movePiece(new Move(63, 60));
+                    getBoard().movePiece(new Move(63, 60));
                 }
             }
         }
         super.moveTo(square);
-        this.isMoved = true;
     }
 
     // עותק של הכלי על לוח אחר
     @Override
     public Piece copy(Board newBoard) {
-        return new King(this.color, this.square, newBoard, this.name);
+        return new King(getColor(), getSquare(), newBoard, getName(), hasMoved());
     }
 }

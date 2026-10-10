@@ -11,6 +11,10 @@ public class Knight extends Piece {
         super(color, square, board, name);
     }
 
+    public Knight(Color color, int square, Board board, char name, boolean hasMoved) {
+        super(color, square, board, name, hasMoved);
+    }
+
     // כל המהלכים האפשריים של הכלי. מסמנים true בכל משבצת שאפשר להגיע אליה,
     // ובסוף הופכים את הסימונים למערך של מהלכים.
     @Override
@@ -23,7 +27,7 @@ public class Knight extends Piece {
                 continue;
             for (int j = -1; j < 2; j += 2) {
                 if (isValidMove(i, (3 - Math.abs(i)) * j)) {
-                    isMoves[this.square + (i * 8) + ((3 - Math.abs(i)) * j)] = true;
+                    isMoves[getSquare() + (i * 8) + ((3 - Math.abs(i)) * j)] = true;
                 }
             }
         }
@@ -40,7 +44,7 @@ public class Knight extends Piece {
         int indexer = 0;
         for (int i = 0; i < 64; i++) {
             if (isMoves[i]) {
-                validMoves[indexer] = new Move(this.square, i);
+                validMoves[indexer] = new Move(getSquare(), i);
                 indexer++;
             }
         }
@@ -58,7 +62,7 @@ public class Knight extends Piece {
                 continue;
             for (int j = -1; j < 2; j += 2) {
                 if (isValidSquare(i, (3 - Math.abs(i)) * j)) {
-                    isMoves[this.square + (i * 8) + ((3 - Math.abs(i)) * j)] = true;
+                    isMoves[getSquare() + (i * 8) + ((3 - Math.abs(i)) * j)] = true;
                 }
             }
         }
@@ -74,7 +78,7 @@ public class Knight extends Piece {
         int indexer = 0;
         for (int i = 0; i < 64; i++) {
             if (isMoves[i]) {
-                moves[indexer] = new Move(this.square, i);
+                moves[indexer] = new Move(getSquare(), i);
                 indexer++;
             }
         }
@@ -85,6 +89,6 @@ public class Knight extends Piece {
     // עותק של הכלי על לוח אחר
     @Override
     public Piece copy(Board newBoard) {
-        return new Knight(this.color, this.square, newBoard, this.name);
+        return new Knight(getColor(), getSquare(), newBoard, getName(), hasMoved());
     }
 }
