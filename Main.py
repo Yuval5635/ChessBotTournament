@@ -1,6 +1,7 @@
 import os
 import subprocess
 import shutil
+import time
 from py4j.java_gateway import JavaGateway, GatewayParameters, launch_gateway
 import pygame
 import threading
@@ -350,7 +351,8 @@ running = True
 # =========================
 # Main game loop
 # =========================
-
+draw_board(screen)
+time.sleep(10)  # Small delay to allow Java to initialize
 while running:
 
     # Pygame events
@@ -402,6 +404,7 @@ while running:
     # before the bot starts thinking
     if not played_by_mouse:
         main.update()
+        time.sleep(1)  # Small delay to prevent high CPU usage
 
 
 
