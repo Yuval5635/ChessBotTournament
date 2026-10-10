@@ -175,7 +175,7 @@ public class Board {
         int index = 0;
 
         for (int i = 0; i < 64; i++) {
-            if (this.isOccupy(i) && this.getColor(i) == color) {
+            if (isEqualColor(i, color)) {
                 Move[] pieceMoves = this.getSquare(i).getValidMoves();
                 for (Move pieceMove : pieceMoves) {
                     allMoves[index] = pieceMove;
@@ -241,18 +241,16 @@ public class Board {
         return isOccupy(square) && isKing(getSquare(square));
     }
 
-    // מדפיסה את הלוח כטקסט
-    public void printBoard() {
-        for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 8; col++) {
-                System.out.print("" + ((getSquare(col, row) == null) ? " " : (getSquare(col, row).getName())));
-                if (col < 7)
-                    System.out.print("|");
-            }
-            System.out.println();
-            if (row < 7)
-                System.out.println("-+-+-+-+-+-+-+-");
-        }
+    public boolean isEmpty(int square) {
+        return !isOccupy(square);
+    }
+
+    public boolean hasMoved(int square) {
+        return isOccupy(square) && getSquare(square).hasMoved();
+    }
+
+    public boolean isEqualColor(int square, Color color) {
+        return isOccupy(square) && getColor(square) == color;
     }
 
     // מחזירה את המערך של 64 המשבצות

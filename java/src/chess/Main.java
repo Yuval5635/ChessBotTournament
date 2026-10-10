@@ -19,12 +19,27 @@ public class Main {
         this.yuvalChessBot = new YuvalBot(game, 25);
         this.chessBot = new ChessBot(game, 5);
         DebugWindow.addLog("Setup complete");
+
+
         DebugWindow.addInputListener(input -> {
             if (input == null)
                 return;
             if (input.equals("start")) {
                 this.isStart = true;
                 DebugWindow.addLog("Game started");
+            }
+        });
+        DebugWindow.addInputListener(input -> {
+            if (input.equals("undo 2")) {
+                this.game.undoTurn();
+                this.game.undoTurn();
+                DebugWindow.addLog("Undid last two moves to get the player's turn back");
+            }
+        });
+        DebugWindow.addInputListener(input -> {
+            if(input.equals("reset")){
+                this.game.resetGame();
+                DebugWindow.addLog("Game reset");
             }
         });
     }

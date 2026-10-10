@@ -17,20 +17,6 @@ public class Game {
     public Game() {
         this.isWhiteTurn = true;
         this.board = new Board();
-        DebugWindow.addLog("Game started");
-        DebugWindow.addInputListener(input -> {
-            if (input.equals("undo 2")) {
-                undoTurn();
-                undoTurn();
-                DebugWindow.addLog("Undid last two moves to get the player's turn back");
-            }
-        });
-        DebugWindow.addInputListener(input -> {
-            if(input.equals("reset")){
-                resetGame();
-                DebugWindow.addLog("Game reset");
-            }
-        });
     }
 
     // מחזירה את הלוח לעמדת הפתיחה ואת התור ללבן
@@ -128,10 +114,5 @@ public class Game {
     public void undoTurn() {
         this.board.undoMove();
         this.isWhiteTurn = !this.isWhiteTurn;
-    }
-
-    // מדפיסה את הלוח כטקסט
-    public void printBoard() {
-        this.board.printBoard();
     }
 }
