@@ -1,4 +1,4 @@
-package minimaxBot;
+package bots.kfirBot;
 
 import chess.Color;
 import chess.Game;

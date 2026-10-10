@@ -1,4 +1,4 @@
-package minimaxBot.yuvalBot;
+package bots.yuvalBot;
 
 import chess.Color;
 import chess.pieces.Piece;

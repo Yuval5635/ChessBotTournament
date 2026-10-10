@@ -1,4 +1,4 @@
-package minimaxBot.yuvalBot;
+package bots.yuvalBot;
 
 import chess.Board;
 import chess.Color;
@@ -31,6 +31,8 @@ public class YuvalBot {
         int beta = Integer.MAX_VALUE;
         bestScore = new int[] { isWhite ? Integer.MIN_VALUE : Integer.MAX_VALUE };
         int phase = 0;
+
+        Long start = System.currentTimeMillis();
 
         // DebugWindow.addLog(this.game.getAllMoves().length + " Moves: ");
 
@@ -65,11 +67,13 @@ public class YuvalBot {
                 }
                 beta = Math.min(beta, bestScoreSum);
             }
-        }
 
-        DebugWindow.addLog("Best Move: " + bestMove + " Best Score: " + java.util.Arrays.toString(bestScore));
-        DebugWindow.addLog("Best Moves: " + java.util.Arrays.toString(bestMoves));
-        DebugWindow.addLog("Best Scores: " + java.util.Arrays.deepToString(bestScores));
+            
+        }
+        DebugWindow.addLog("Best Move: " + bestMove + " Best Score: " + bestScore+" Time: " + ((System.currentTimeMillis() -start)/1000.0 ) + "s");
+        // DebugWindow.addLog("Best Move: " + bestMove + " Best Score: " + java.util.Arrays.toString(bestScore));
+        // DebugWindow.addLog("Best Moves: " + java.util.Arrays.toString(bestMoves));
+        // DebugWindow.addLog("Best Scores: " + java.util.Arrays.deepToString(bestScores));
         if (bestMove != null) {
             this.game.turn(bestMove);
         }
