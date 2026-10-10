@@ -4,8 +4,10 @@ import chess.Board;
 import chess.Color;
 import chess.Move;
 
+// צריח: זז ישר, בשורה או בעמודה, עד שנתקעים בכלי או בקצה הלוח
 public class Rook extends Piece {
 
+    // האם הצריח כבר זז במשחק (חשוב להצרחה)
     boolean isMoved;
 
     public Rook(Color color, int square, Board board, char name) {
@@ -13,10 +15,13 @@ public class Rook extends Piece {
         this.isMoved = false;
     }
 
+    // כל המהלכים האפשריים של הכלי. מסמנים true בכל משבצת שאפשר להגיע אליה,
+    // ובסוף הופכים את הסימונים למערך של מהלכים.
     @Override
     public Move[] getValidMoves() {
         boolean[] isMoves = new boolean[64];
 
+        // i הוא הכיוון (1- או 1). הלולאה הראשונה זזה בשורות, השנייה בעמודות
         for (int i = -1; i < 2; i += 2) {
             for (int j = i; true; j += i) {
                 if (isValidMove(j, 0)) {
@@ -40,6 +45,7 @@ public class Rook extends Piece {
             }
         }
 
+        // סופרים כמה משבצות סומנו, ובונים מהן את מערך המהלכים
         int numOfValidMoves = 0;
         for (boolean isMove : isMoves) {
             if (isMove)
@@ -59,6 +65,7 @@ public class Rook extends Piece {
         return validMoves;
     }
 
+    // כמו getValidMoves, אבל כולל גם משבצות שעומד בהן כלי מאותו צבע
     @Override
     public Move[] getMovesWithDeffence() {
         boolean[] isMoves = new boolean[64];
@@ -109,12 +116,14 @@ public class Rook extends Piece {
         return isMoved;
     }
 
+    // כשהצריח זז, זוכרים שהוא כבר זז
     @Override
     public void moveTo(int square) {
         super.moveTo(square);
         this.isMoved = true;
     }
 
+    // עותק של הכלי על לוח אחר
     @Override
     public Piece copy(Board newBoard) {
         return new Rook(this.color, this.square, newBoard, this.name);

@@ -4,8 +4,10 @@ import chess.Board;
 import chess.Color;
 import chess.Move;
 
+// מלך: צעד אחד לכל כיוון, ובנוסף הצרחה
 public class King extends Piece {
 
+    // האם המלך כבר זז במשחק (חשוב להצרחה)
     boolean isMoved;
 
     public King(Color color, int square, Board board, char name) {
@@ -13,10 +15,13 @@ public class King extends Piece {
         this.isMoved = false;
     }
 
+    // כל המהלכים האפשריים של הכלי. מסמנים true בכל משבצת שאפשר להגיע אליה,
+    // ובסוף הופכים את הסימונים למערך של מהלכים.
     @Override
     public Move[] getValidMoves() {
         boolean[] isMoves = new boolean[64];
 
+        // המשבצות שמסביב למלך
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if (isValidMove(i, j)) {
@@ -25,6 +30,7 @@ public class King extends Piece {
             }
         }
 
+        // הצרחה: בדיקה לכל אחת מארבע משבצות היעד
         if (canCastle(2)) {
             isMoves[2] = true;
         }
@@ -38,6 +44,7 @@ public class King extends Piece {
             isMoves[62] = true;
         }
 
+        // סופרים כמה משבצות סומנו, ובונים מהן את מערך המהלכים
         int numOfValidMoves = 0;
         for (boolean isMove : isMoves) {
             if (isMove)
@@ -57,6 +64,7 @@ public class King extends Piece {
         return validMoves;
     }
 
+    // כמו getValidMoves, אבל כולל גם משבצות שעומד בהן כלי מאותו צבע
     @Override
     public Move[] getMovesWithDeffence() {
         boolean[] isMoves = new boolean[64];
@@ -101,18 +109,22 @@ public class King extends Piece {
         return moves;
     }
 
+    // בודקת אם מותר להצריח למשבצת toSquare: המלך והצריח עוד לא זזו, והמשבצות שביניהם ריקות.
+    // כל מלך מצריח רק בשורה שלו: הלבן למשבצות 2 ו-6, השחור ל-58 ו-62.
     public boolean canCastle(int toSquare) {
         if (this.isMoved)
             return false;
-        if (toSquare == 2) {
-            if (this.board.getSquare(0) instanceof Rook && !((Rook) this.board.getSquare(0)).isMoved()) {
-                if (!this.board.isOccupy(1) && !this.board.isOccupy(2) && !this.board.isOccupy(3)) {
+        // המשבצת הראשונה בשורת הבית של המלך: 0 ללבן, 56 לשחור
+        int row = this.color == Color.WHITE ? 0 : 56;
+        if (toSquare == row + 2) {
+            if (this.board.getSquare(row) instanceof Rook && !((Rook) this.board.getSquare(row)).isMoved()) {
+                if (!this.board.isOccupy(row + 1) && !this.board.isOccupy(row + 2) && !this.board.isOccupy(row + 3)) {
                     return true;
                 }
             }
-        } else if (toSquare == 6) {
-            if (this.board.getSquare(7) instanceof Rook && !((Rook) this.board.getSquare(7)).isMoved()) {
-                if (!this.board.isOccupy(5) && !this.board.isOccupy(6)) {
+        } else if (toSquare == row + 6) {
+            if (this.board.getSquare(row + 7) instanceof Rook && !((Rook) this.board.getSquare(row + 7)).isMoved()) {
+                if (!this.board.isOccupy(row + 5) && !this.board.isOccupy(row + 6)) {
                     return true;
                 }
             }
@@ -120,6 +132,7 @@ public class King extends Piece {
         return false;
     }
 
+    // כשהמלך זז: אם זו הצרחה מזיזים גם את הצריח, ואז זוכרים שהמלך כבר זז
     @Override
     public void moveTo(int square) {
         if (canCastle(square)) {
@@ -141,6 +154,7 @@ public class King extends Piece {
         this.isMoved = true;
     }
 
+    // עותק של הכלי על לוח אחר
     @Override
     public Piece copy(Board newBoard) {
         return new King(this.color, this.square, newBoard, this.name);
